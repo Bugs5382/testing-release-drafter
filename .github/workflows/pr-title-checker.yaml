@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  title-checker:
+  Title_Checker:
     name: Check PR title
     runs-on: ubuntu-latest
 
