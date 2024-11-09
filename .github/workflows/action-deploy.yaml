@@ -14,10 +14,11 @@ jobs:
     uses: ./.github/workflows/action-test.yaml
 
   Change_Log:
+    needs: Test
     uses: ./.github/workflows/update-changelog.yaml
 
   Publish:
-    needs: ['Change_Log', 'Test']
+    needs: Change_Log
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
