@@ -1,0 +1,55 @@
+name: Release and Publish
+on:
+  release:
+    types:
+      - published
+
+jobs:
+  Test:
+    uses: ./.github/workflows/action-test.yaml
+
+  Publish:
+    needs: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create Directory
+        run: mkdir -p ./lib
+
+      - name: Download the build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: cache
+          path: ./
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          registry-url: 'https://registry.npmjs.org/'
+
+      - name: Update Version in Package.json
+        run: |
+          npm version ${{ github.event.release.tag_name }} --no-git-tag-version
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore(release): update to version ${{ github.event.release.tag_name }}"
+          git push origin main
+
+      - name: Publish to npm
+        run: |
+          if [[ "${{ github.ref_name }}" == "develop" ]]; then
+            # npm publish --tag beta
+            echo NPM Publish (Beta)
+          else
+            # npm publish
+            echo NPM Publish (Real Version)
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  Document:
+    needs: Publish
+    uses: ./.github/workflows/action-docs.yaml
+

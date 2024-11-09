@@ -1,0 +1,15 @@
+{
+  "name": "@the-rabbit-hole/testing-release-drafter",
+  "version": "2.0.0-beta.0",
+  "description": "Testing Release Drafter Workflow",
+  "main": "index.js",
+  "scripts": {
+    "run": "node index.js",
+    "lint": "echo Cleanup code and make usre its properlly formated",
+    "test": "echo Run Unit Testing",
+    "typedoc": "echo Running Build",
+    "build": "echo Normally we would build a application from TypeScript to NodeJS"
+  },
+  "author": "",
+  "license": "ISC"
+}
