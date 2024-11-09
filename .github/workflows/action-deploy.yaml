@@ -47,10 +47,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git commit -am "chore(release): update to version $CLEAN_TAG"
-
-      - name: Push to Repo
-        run: |
-          if [[ "${{ github.ref_name }}" == "develop" ]]; then
+          if [[ "${{ github.ref }}" == "develop" ]]; then
             git push origin HEAD:develop
           else
             git push origin HEAD:main
@@ -60,7 +57,7 @@ jobs:
 
       - name: Publish to npm
         run: |
-          if [[ "${{ github.ref_name }}" == "develop" ]]; then
+          if [[ "${{ github.ref }}" == "develop" ]]; then
             # npm publish --tag beta
             echo NPM Publish (Beta)
           else
