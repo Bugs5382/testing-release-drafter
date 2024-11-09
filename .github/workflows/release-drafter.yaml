@@ -16,17 +16,10 @@ jobs:
 
     steps:
 
-      - name: Update Release Draft (Develop)
-        if: github.ref == 'refs/heads/develop'
+      - name: Update Release Draft
         uses: release-drafter/release-drafter@v6
         with:
-          prerelease: true
-          commitish: develop
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Update Release Draft
-        if: github.ref == 'refs/heads/main'
-        uses: release-drafter/release-drafter@v6
+          prerelease: ${{ env.BRANCH_NAME == 'develop' }}
+          commitish: ${{ env.BRANCH_NAME }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

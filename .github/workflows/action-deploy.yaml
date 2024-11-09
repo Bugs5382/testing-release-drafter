@@ -46,7 +46,7 @@ jobs:
 
       - name: Publish to npm
         run: |
-          if [[ "${{ github.ref }}" == "develop" ]]; then
+          if [[ "${{ env.BRANCH_NAME }}" == "develop" ]]; then
             # npm publish --tag beta
             echo NPM Publish (Beta)
           else
@@ -72,17 +72,13 @@ jobs:
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           git commit -am "chore(release): update to version $CLEAN_TAG"
           git pull
-          if [[ "${{ github.ref }}" == "develop" ]]; then
-            git push origin HEAD:develop
-          else
-            git push origin HEAD:main
-          fi
+          git push origin HEAD:main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish to npm
         run: |
-          if [[ "${{ github.ref }}" == "develop" ]]; then
+          if [[ "${{ env.BRANCH_NAME }}" == "develop" ]]; then
             # npm publish --tag beta
             echo NPM Publish (Beta)
           else
