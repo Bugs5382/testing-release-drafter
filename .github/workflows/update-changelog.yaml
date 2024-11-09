@@ -32,4 +32,5 @@ jobs:
         with:
           branch: ${{ github.event.release.target_commitish }}
           commit_message: "chore(docs): update CHANGELOG.md"
+          push_options: '--force'
           file_pattern: CHANGELOG.md
