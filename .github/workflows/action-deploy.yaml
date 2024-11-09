@@ -51,5 +51,5 @@ jobs:
 
   Document:
     needs: Publish
-    uses: ./.github/workflows/actions-docs.yaml
+    uses: ./.github/workflows/action-docs.yaml
 
