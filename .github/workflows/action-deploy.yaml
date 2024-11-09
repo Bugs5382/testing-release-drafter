@@ -13,11 +13,17 @@ jobs:
   Test:
     uses: ./.github/workflows/action-test.yaml
 
-  Publish:
+  Change_Log:
     needs: Test
+    uses: ./.github/workflows/update-changelog.yaml
+
+  Publish:
+    needs: ['Change_Log', 'Test']
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: 'false'
 
       - name: Create Directory
         run: mkdir -p ./lib
@@ -45,7 +51,16 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git commit -am "chore(release): update to version $CLEAN_TAG"
-          git push origin main
+
+      - name: Push to Repo
+        run: |
+          if [[ "${{ github.ref_name }}" == "develop" ]]; then
+            git push origin develop
+          else
+            git push origin main
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish to npm
         run: |
