@@ -4,10 +4,11 @@ on:
   push:
     branches:
       - main
+      - develop
 
 jobs:
   update_release_draft:
-    name: Release drafter
+    name: Release Drafter
     runs-on: ubuntu-latest
 
     steps:
