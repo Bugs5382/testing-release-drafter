@@ -27,6 +27,5 @@ jobs:
         uses: release-drafter/release-drafter@v6
         with:
           prerelease: false
-          commitish: main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
