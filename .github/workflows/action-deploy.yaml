@@ -50,11 +50,7 @@ jobs:
 
       - name: Push to Repo
         run: |
-          if [[ "${{ github.ref_name }}" == "develop" ]]; then
-            git push origin develop
-          else
             git push origin main
-          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
