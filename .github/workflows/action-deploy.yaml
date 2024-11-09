@@ -50,7 +50,7 @@ jobs:
 
       - name: Push to Repo
         run: |
-            git push origin main
+            git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
