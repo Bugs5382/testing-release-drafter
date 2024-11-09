@@ -25,7 +25,5 @@ jobs:
       - name: Update Release Draft
         if: github.event.pull_request.base.ref != 'develop'
         uses: release-drafter/release-drafter@v6
-        with:
-          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
