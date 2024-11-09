@@ -14,7 +14,6 @@ jobs:
     uses: ./.github/workflows/action-test.yaml
 
   Change_Log:
-    needs: Test
     uses: ./.github/workflows/update-changelog.yaml
 
   Publish:

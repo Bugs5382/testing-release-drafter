@@ -6,6 +6,8 @@ on:
 
 permissions:
   contents: write
+  actions: write
+  checks: write
 
 jobs:
   Update_ChangeLog:
