@@ -14,7 +14,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  check_semver_labels:
+  Check_SemVer_Labels:
     name: Check Semver labels
     runs-on: ubuntu-latest
 
@@ -25,7 +25,7 @@ jobs:
           hasSome: major,minor,patch
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
-  check_cc_labels:
+  Check_CC_Labels:
     name: Check conventional commits labels
     runs-on: ubuntu-latest
     steps:

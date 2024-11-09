@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  update:
+  Update_ChangeLog:
     name: Update Changelog
     runs-on: ubuntu-latest
 
@@ -25,9 +25,9 @@ jobs:
           latest-version: ${{ github.event.release.tag_name }}
           release-notes: ${{ github.event.release.body }}
 
-      - name: Commit updated CHANGELOG
+      - name: Commit updated CHANGELOG.md
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           branch: ${{ github.event.release.target_commitish }}
-          commit_message: "chore(docs): Update CHANGELOG"
+          commit_message: "chore(docs): update CHANGELOG.md"
           file_pattern: CHANGELOG.md
