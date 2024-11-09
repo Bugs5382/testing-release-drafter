@@ -12,7 +12,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      - name: Update Release Draft (Develop)
+        if: github.event.pull_request.base.ref == 'develop'
+        uses: release-drafter/release-drafter@v6
+        with:
+          prerelease: true
+          commitish: develop
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Update Release Draft
+        if: github.event.pull_request.base.ref != 'develop'
         uses: release-drafter/release-drafter@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

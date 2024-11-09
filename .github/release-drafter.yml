@@ -35,16 +35,10 @@ categories:
       - deps
       - dependencies
     collapse-after: 5
-
-prerelease: ${{ github.ref == 'refs/heads/develop' }}
+prerelease-identifier: 'beta'
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
 version-resolver:
-  branches:
-    - name: "develop"
-      tag-template: "v$NEXT_PATCH_VERSION-beta.$PRERELEASE_PATCH"
-    - name: "main"
-      tag-template: "v$NEXT_PATCH_VERSION"
   major:
     labels:
       - major
