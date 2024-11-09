@@ -1,36 +1,28 @@
 name: Update Changelog
 
 on:
-  workflow_dispatch:
-  workflow_call:
-
-permissions:
-  contents: write
-  actions: write
-  checks: none
+  release:
+    types:
+      - released
 
 jobs:
-  Update_ChangeLog:
+  update:
     name: Update Changelog
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.release.target_commitish }}
-          persist-credentials: 'false'
+        uses: actions/checkout@v2
 
       - name: Update Changelog
-        uses: stefanzweifel/changelog-updater-action@v1.11.0
+        uses: stefanzweifel/changelog-updater-action@v1
         with:
-          latest-version: ${{ github.event.release.tag_name }}
+          latest-version: ${{ github.event.release.name }}
           release-notes: ${{ github.event.release.body }}
 
-      - name: Commit updated CHANGELOG.md
-        uses: stefanzweifel/git-auto-commit-action@v5
+      - name: Commit updated Changelog
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          branch: ${{ github.event.release.target_commitish }}
-          commit_message: "chore(docs): update CHANGELOG.md"
-          push_options: '--force'
+          branch: main
+          commit_message: 'docs(changelog): update changelog'
           file_pattern: CHANGELOG.md
