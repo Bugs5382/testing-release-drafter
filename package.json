@@ -7,6 +7,7 @@
     "run": "node index.js",
     "lint": "echo Cleanup code and make usre its properlly formated",
     "test": "echo Run Unit Testing",
+    "typedoc": "echo Running Build",
     "build": "echo Normally we would build a application from TypeScript to NodeJS"
   },
   "author": "",
