@@ -2,8 +2,11 @@ name: Publish Docs
 on:
   workflow_dispatch:
   workflow_call:
+
 permissions:
-  contents: write
+  contents: read
+  actions: write
+  checks: write
 
 jobs:
   History:
