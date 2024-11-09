@@ -1,5 +1,17 @@
 # Testing Release Drafter
 
+## v1.1.1 - 2024-11-09
+
+#### What Changed 👀
+
+#### ⚠️ Changes
+
+- chore: update changelog @Bugs5382 (#8)
+
+### Extra
+
+**Full Changelog**: https://github.com/Bugs5382/testing-release-drafter/compare/v1.1.0...v1.1.1
+
 ## v1.1.0 - 2024-11-09
 
 ### What Changed 👀
