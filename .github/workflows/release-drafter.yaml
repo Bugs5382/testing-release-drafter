@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+
+  pull_request:
+    branches:
       - develop
 
 jobs:
@@ -23,7 +26,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update Release Draft
-        if: github.event.pull_request.base.ref != 'develop'
+        if: github.ref == 'refs/heads/main'
         uses: release-drafter/release-drafter@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
