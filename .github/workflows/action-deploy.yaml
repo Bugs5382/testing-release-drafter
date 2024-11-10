@@ -15,8 +15,11 @@ jobs:
 
   Strip_Version:
     runs-on: ubuntu-latest
+    outputs:
+      CLEAN_TAG: ${{ steps.set-output.outputs.CLEAN_TAG }}
     steps:
       - name: Strip "v" from Tag
+        id: set-output
         run: echo "CLEAN_TAG=${GITHUB_EVENT_RELEASE_TAG_NAME#v}" >> $GITHUB_ENV
         env:
           GITHUB_EVENT_RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
