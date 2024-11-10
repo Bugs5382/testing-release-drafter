@@ -69,6 +69,8 @@ jobs:
   Update_Repo:
     runs-on: ubuntu-latest
     needs: ['Test', 'Strip_Version', 'Publish']
+    permissions:
+      contents: write
     env:
       CLEAN_TAG: ${{ needs.Strip_Version.outputs.CLEAN_TAG }}
       GIT_BRANCH_TARGET: ${{ needs.Publish.outputs.GIT_BRANCH_TARGET }}
@@ -96,7 +98,6 @@ jobs:
       - name: Commit and Push Version Update
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          branch: ${{ env.GIT_BRANCH_TARGET }}
           commit_message: "chore(release): ${{ github.event.release.tag_name }} [skip ci]"
 
   Document:
