@@ -12,6 +12,7 @@ on:
       - ready_for_review
       - synchronize
 
+
 jobs:
 
   Build:
@@ -51,7 +52,3 @@ jobs:
             package.json
             package-lock.json
             ./lib
-
-#  Release_Draft:
-#    needs: Build
-#    uses: ./.github/workflows/release-drafter.yaml
