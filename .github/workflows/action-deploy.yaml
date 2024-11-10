@@ -73,13 +73,15 @@ jobs:
       CLEAN_TAG: ${{ needs.Strip_Version.outputs.CLEAN_TAG }}
       GIT_BRANCH_TARGET: ${{ needs.Publish.outputs.GIT_BRANCH_TARGET }}
     steps:
-      # - uses: hmarr/debug-action@v3
+      - uses: hmarr/debug-action@v3
 
       - uses: actions/checkout@v4
         with:
-          ref: "refs/heads/$GIT_BRANCH_TARGET"
-        env:
-          GIT_BRANCH_TARGET: $GIT_BRANCH_TARGET
+          ref: ${{ GIT_BRANCH_TARGET }}
+          sparse-checkout: |
+            package.json
+            CHANGELOG.md
+          sparse-checkout-cone-mode: false
 
       - name: Update Version in Package.json
         id: set-git-branch
@@ -94,7 +96,7 @@ jobs:
       - name: Commit and Push Version Update
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          branch: '${{ github.head_ref }}'
+          branch: '${{ GIT_BRANCH_TARGET }}'
           commit_message: "chore(release): ${{ github.event.release.tag_name }} [skip ci]"
 
   Document:
