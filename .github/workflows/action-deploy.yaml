@@ -78,6 +78,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: "refs/heads/$GIT_BRANCH_TARGET"
+        env:
+          GIT_BRANCH_TARGET: $GIT_BRANCH_TARGET
 
       - name: Update Version in Package.json
         id: set-git-branch
@@ -92,6 +94,7 @@ jobs:
       - name: Commit and Push Version Update
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
+          branch: '${{ github.head_ref }}'
           commit_message: "chore(release): ${{ github.event.release.tag_name }} [skip ci]"
 
   Document:
