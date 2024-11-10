@@ -77,7 +77,7 @@ jobs:
 
       - uses: actions/checkout@v4
         with:
-          ref: ${{ GIT_BRANCH_TARGET }}
+          ref: $GIT_BRANCH_TARGET
           sparse-checkout: |
             package.json
             CHANGELOG.md
@@ -96,7 +96,7 @@ jobs:
       - name: Commit and Push Version Update
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          branch: '${{ GIT_BRANCH_TARGET }}'
+          branch: $GIT_BRANCH_TARGET
           commit_message: "chore(release): ${{ github.event.release.tag_name }} [skip ci]"
 
   Document:
