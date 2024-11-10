@@ -26,13 +26,12 @@ jobs:
 
   Publish:
     runs-on: ubuntu-latest
+    outputs:
+      GIT_BRANCH_TARGET: ${{ steps.set-npm-tag.outputs.GIT_BRANCH_TARGET }}
     needs: ['Test', 'Strip_Version']
     env:
       CLEAN_TAG: ${{ needs.Strip_Version.outputs.CLEAN_TAG }}
     steps:
-      - name: Print all environment variables
-        run: env
-
       - name: Create Directory
         run: mkdir -p ./lib
 
@@ -51,12 +50,13 @@ jobs:
       - name: Update Version in Package.json
         id: set-npm-tag
         run: |
-          echo $CLEAN_TAG
           npm version $CLEAN_TAG --no-git-tag-version
           if [[ "$CLEAN_TAG" == *"beta"* ]]; then
             echo "NPM_TAG=beta" >> $GITHUB_OUTPUT
+            echo "GIT_BRANCH_TARGET=develop" >> $GITHUB_OUTPUT
           else
             echo "NPM_TAG=latest" >> $GITHUB_OUTPUT
+            echo "GIT_BRANCH_TARGET=main" >> $GITHUB_OUTPUT
           fi
 
       - name: Publish to npm
@@ -71,21 +71,32 @@ jobs:
     needs: ['Test', 'Strip_Version', 'Publish']
     env:
       CLEAN_TAG: ${{ needs.Strip_Version.outputs.CLEAN_TAG }}
+      GIT_BRANCH_TARGET: ${{ needs.Publish.outputs.GIT_BRANCH_TARGET }}
     steps:
       - uses: actions/checkout@v4
-
-      - name: Print all environment variables
-        run: env
+        with:
+          ref: $GIT_BRANCH_TARGET
 
       - name: Update Version in Package.json
+        id: set-git-branch
         run: npm version $CLEAN_TAG --no-git-tag-version
 
-      - name: Commit and Push Version Update
-        uses: devops-infra/action-commit-push@v0.9.2
+      - name: Update Changelog
+        uses: stefanzweifel/changelog-updater-action@v1
         with:
-          github_token: "${{ secrets.GITHUB_TOKEN }}"
-          commit_message: "chore(release): update to version ${{ github.event.release.tag_name }}"
-          force: false
+          latest-version: ${{ github.event.release.name }}
+          release-notes: ${{ github.event.release.body }}
+
+      - name: Commit updated Changelog
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: 'docs(changelog): update changelog [skip ci]'
+          file_pattern: CHANGELOG.md
+
+      - name: Commit and Push Version Update
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "chore(release): ${{ github.event.release.tag_name }} [skip ci]"
 
   Document:
     needs: ['Update_Repo', 'Publish']
