@@ -44,8 +44,8 @@ jobs:
       - name: Update Version in Package.json
         id: set-npm-tag
         run: | 
-         npm version ${{ steps.set-tag.outputs.clean_tag }} --no-git-tag-version
-         if [[ "${{ steps.set-tag.outputs.clean_tag }}" == *"beta"* ]]; then
+         npm version ${{ steps.Strip_Version.outputs.CLEAN_TAG }} --no-git-tag-version
+         if [[ "${{ steps.Strip_Version.outputs.CLEAN_TAG }}" == *"beta"* ]]; then
            echo "NPM_TAG=beta" >> $GITHUB_OUTPUT
          else
            echo "NPM_TAG=latest" >> $GITHUB_OUTPUT
