@@ -96,7 +96,7 @@ jobs:
       - name: Commit and Push Version Update
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          branch: $GIT_BRANCH_TARGET
+          branch: ${{ env.GIT_BRANCH_TARGET }}
           commit_message: "chore(release): ${{ github.event.release.tag_name }} [skip ci]"
 
   Document:
