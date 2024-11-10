@@ -73,6 +73,8 @@ jobs:
       CLEAN_TAG: ${{ needs.Strip_Version.outputs.CLEAN_TAG }}
       GIT_BRANCH_TARGET: ${{ needs.Publish.outputs.GIT_BRANCH_TARGET }}
     steps:
+      - uses: hmarr/debug-action@v3
+
       - uses: actions/checkout@v4
         with:
           ref: refs/heads/$GIT_BRANCH_TARGET
