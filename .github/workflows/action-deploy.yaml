@@ -75,7 +75,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: $GIT_BRANCH_TARGET
+          ref: refs/heads/$GIT_BRANCH_TARGET
 
       - name: Update Version in Package.json
         id: set-git-branch
@@ -86,12 +86,6 @@ jobs:
         with:
           latest-version: ${{ github.event.release.name }}
           release-notes: ${{ github.event.release.body }}
-
-      - name: Commit updated Changelog
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: 'docs(changelog): update changelog [skip ci]'
-          file_pattern: CHANGELOG.md
 
       - name: Commit and Push Version Update
         uses: stefanzweifel/git-auto-commit-action@v4
