@@ -15,14 +15,10 @@ jobs:
 
   Strip_Version:
     runs-on: ubuntu-latest
-    outputs:
-      clean_tag: ${{ steps.set-tag.outputs.clean_tag }}
     steps:
       - name: Strip "v" from Tag
         id: set-tag
-        run: |
-          echo "CLEAN_TAG=${GITHUB_EVENT_RELEASE_TAG_NAME#v}" >> $GITHUB_ENV
-          echo "::set-output name=clean_tag::${CLEAN_TAG}"
+        run: echo "CLEAN_TAG=${GITHUB_EVENT_RELEASE_TAG_NAME#v}" >> $GITHUB_OUTPUT
         env:
           GITHUB_EVENT_RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
 
@@ -46,20 +42,21 @@ jobs:
           registry-url: 'https://registry.npmjs.org/'
 
       - name: Update Version in Package.json
-        run: |
-          npm version ${{ needs.Strip_Version.outputs.clean_tag }} --no-git-tag-version
+        id: set-npm-tag
+        run: | 
+         npm version ${{ steps.set-tag.outputs.clean_tag }} --no-git-tag-version
+         if [[ "${{ steps.set-tag.outputs.clean_tag }}" == *"beta"* ]]; then
+           echo "NPM_TAG=beta" >> $GITHUB_OUTPUT
+         else
+           echo "NPM_TAG=latest" >> $GITHUB_OUTPUT
+         fi
 
       - name: Publish to npm
         uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
           dry-run: true
-          tag: |
-            if [[ "${{ needs.Strip_Version.outputs.clean_tag }}" == *"beta"* ]]; then
-              beta
-            else
-              latest
-            fi
+          tag: ${{ steps.set-npm-tag.outputs.npm_tag }}
 
   Update_Repo:
     runs-on: ubuntu-latest
@@ -68,7 +65,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Update Version in Package.json
-        run: npm version ${{ needs.Strip_Version.outputs.clean_tag }} --no-git-tag-version
+        run: npm version ${{ steps.set-tag.outputs.clean_tag }} --no-git-tag-version
 
       - name: Update Version in Package.json
         uses: devops-infra/action-commit-push@v0.9.2
@@ -76,19 +73,6 @@ jobs:
           github_token: "${{ secrets.GITHUB_TOKEN }}"
           commit_message: "chore(release): update to version ${{ github.event.release.tag_name }}"
           force: false
-
-#      - name: Update Version in Package.json
-#        run: |
-#          npm version $CLEAN_TAG --no-git-tag-version
-#          git config user.name "github-actions[bot]"
-#          git config user.email "github-actions[bot]@users.noreply.github.com"
-#          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-#          git commit -am "chore(release): update to version $CLEAN_TAG"
-#          git pull
-#          git push origin HEAD:main
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
 
   Document:
     needs: Publish
